@@ -1,36 +1,25 @@
-clc;
-% This script organises the response time, response, the stocastic chain 
-% and randomness of the data collect of the Goalkeeper game.
+% [data, id] =  building_DataMatrix(dir)
 %
-% Author: Paulo Roberto Cabral Passos.
-% Last Modification: 18/07/2019
+% Given the folder location, the function builds the data matrix with the
+% organization bellow. id is a list with the original ids of the
+% participants.
 %
-% All information is stored in "data" variable, in a numerical form, that is
-% organized in columns as follows: 
-% data(:,1) = group; (check) 
-% data(:,2) = day; (check)
-% data(:,3) = cell; (check)
-% data(:,4) = step; (check)
-% data(:,5) = tree; (check)
-% data(:,6) = alternative identification; (check)
-% data(:,7) = response time (check)
-% data(:,8) = response (check)
-% data(:,9) = stochastic chain (check)
-% data(:,10) = randomness (1 - yes, 0 - no) (check)
-% data(:,11) = logical or not? (1 - yes, 0 - no) 
+% folder: response_time_analysis
 %
-% Reading and organizing the data
-%
-% ATENTION. MAY BE NECESSARY TO CHANGE FOLDER ADRESS.
-% If you are at INDC, type the following line:
-% addpath('D:\Roberto062019backup\Documentos\Dr. Fisiologia\Jogo do Goleiro\MatlabScripts');
-% If you are at home, type the following line:
-% addpath('/home/roberto/Documents/Dr. Fisiologia/Jogo do Goleiro/MatlabScripts');
-% The following *.csv files were created by a C routine.
+% data(:,1) = group identification (1-6) 
+% data(:,2) = day (1-2)
+% data(:,3) = cell (1-102 or 1-104)
+% data(:,4) = step (1-6)
+% data(:,5) = tree (1-6)
+% data(:,6) = alternative identification (a integer instead of the original PXXXX) 
+% data(:,7) = response time (a positive real number)
+% data(:,8) = response (0, 1 or 2 representing left, center or right)
+% data(:,9) = stochastic chain (0, 1 or 2 representing left, center or right)
+% data(:,10) = randomness (1 - yes, 0 - no, indicating if more than one direction was probable) 
+% data(:,11) = logical or not? (1 - yes, 0 - no, indicating if the response violeted the logic of the tree) 
 
-% Opening numerical data
+function [data, id] =  building_DataMatrix(dir)
 
-dir = '/home/roberto/Documents/Dr. Fisiologia/Jogo do Goleiro/MatlabScripts/Goalkeeper_Routines/data_files/response_time_analysis/'; % directory containing the *.csv files.
 ppg_f = 'participants_pergroup.csv'; % *.csv file containing how many participants each group have. It has twice the number of participants because it counts per day.
 ppg = csvread([dir ppg_f]); ppg = ppg(1:size(ppg,2)-1); % Opening and rectifying
 spp_f = 'steps_perparticipant.csv'; % *.csv file containing how many steps each participant completed.
@@ -56,18 +45,9 @@ rndness = textscan(rndness_f, '%s'); rndness = rndness{1,1}{1,1}; rndness(1:leng
 mlength = sum(cells); % each participant has a number of steps he played, for each there will be N cells, 12 for the first and 102, 104 for the others. How many lines the data matrix must have?
 data = zeros(mlength,7);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%THIS PROCEEDING TAKES TOO LONG, UPLOAD THE DATA USING:
 upload = open('/home/roberto/Documents/Dr. Fisiologia/ProgramasC/Planilhas/rtime_analysis/processedDATA.mat');
 id_alt = upload.id_alt;
 clear upload
-
-% Setting the alternative id (need to store that data, to much time to
-% build)
-
-% lim = max(cells)*max(spp)*2*max(ppg);
-%id_alt = set_idalt_improv(mlength, id, lim);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Determining the group and the day
 data = groupday_multi(data, ppg,spp,cells);
@@ -88,3 +68,5 @@ data(:,10) = rndvec(rndness, mlength);
 % Determining if the response is logic or not.
 data(:,11) = log_or_not(data(:,3),data(:,9),data(:,8),data(:,5));
 
+
+end
