@@ -46,7 +46,7 @@ for a = 1:n
                 aux2 = aux2+1;
                 aux1 = aux1+1;
                 end
-                if match == 0;
+                if match == 0
                 TMT(a,b) = 0;
                 else
                 dumb = pair2(1,size(pair2,2));

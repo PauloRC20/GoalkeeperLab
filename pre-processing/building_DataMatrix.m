@@ -1,6 +1,6 @@
 % [data, id] =  building_DataMatrix(dir)
 %
-% Given the folder location, the function builds the data matrix with the
+% Given the response_time_analysis folder location, the function builds the data matrix with the
 % organization bellow. id is a list with the original ids of the
 % participants.
 %

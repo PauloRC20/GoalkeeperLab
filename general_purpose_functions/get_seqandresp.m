@@ -25,7 +25,7 @@ b = 0; e = 0;
 for a = 1:length(data)
    if (data(a,3) == 1)&&((data(a,6) == id)&&(data(a,5) == tau))
         b = a+from-1;
-        e = b+till-1;
+        e = b+(till-from);
         break;
    end
 end
@@ -35,4 +35,23 @@ Y = data(b:e,8);
 Z = data(b:e,7);
 
 end
+
+% Backup
+% function [X,Y,Z] = get_seqandresp(data,tau, id, from, till)
+% 
+% 
+% b = 0; e = 0;
+% for a = 1:length(data)
+%    if (data(a,3) == 1)&&((data(a,6) == id)&&(data(a,5) == tau))
+%         b = a+from-1;
+%         e = b+till-1;
+%         break;
+%    end
+% end
+% 
+% X = data(b:e,9); 
+% Y = data(b:e,8);
+% Z = data(b:e,7);
+% 
+% end
 
